@@ -13,6 +13,7 @@ export function CountyDetail() {
 
   if (isLoading) return <p className="p-4">Loading…</p>
   if (error) return <p className="p-4 text-red-600">Failed to load this county.</p>
+  if (!data) return null
 
   return (
     <div className="p-4">

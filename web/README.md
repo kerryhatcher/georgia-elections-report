@@ -1,32 +1,45 @@
-# React + TypeScript + Vite
+# web
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+The React (Vite + TypeScript + Tailwind + React Router + TanStack Query) SPA
+that renders the report from static JSON produced by [`generator/`](../generator/README.md).
 
-Currently, two official plugins are available:
+## Dev workflow
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+1. Regenerate the data the app reads:
+   ```sh
+   cd ../generator && uv run build.py
+   ```
+2. Install dependencies (first time only):
+   ```sh
+   npm install
+   ```
+3. Start the dev server:
+   ```sh
+   npm run dev
+   ```
 
-## React Compiler
+`public/data/` is a build artifact produced by the generator — it's
+git-ignored, not hand-authored. The app fetches its contents at runtime
+(`src/lib/api.ts`) as if it were a REST API, but it's really just static
+JSON files.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Build
 
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```sh
+npm run build
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Pre-deploy checklist (hosting-URL dependent)
+
+These three items are **not** wired up yet because they depend on the final
+GitHub Pages URL. Once that URL is chosen, all three MUST change together —
+doing only one will break routing or asset loading:
+
+1. **Set Vite `base`** in `vite.config.ts` (e.g. `/naacp-report/` for a
+   project page).
+2. **Add an SPA deep-link fallback** — a `404.html` copy of `index.html`
+   (or switch to `HashRouter` / set a router `basename`) — so routes like
+   `/counties/fulton` work on direct load instead of 404ing.
+3. **Update `src/lib/api.ts`** — it currently fetches *absolute* paths
+   (`/data/...`), which 404 under a project subpath. Make them base-relative
+   at the same time, e.g. `` `${import.meta.env.BASE_URL}data/counties.json` ``.
