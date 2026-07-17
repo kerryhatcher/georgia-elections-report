@@ -1,0 +1,65 @@
+name: Deploy report site
+
+# Manual trigger only until the GitHub Pages hosting URL is chosen and the
+# base-path / SPA-fallback items in web/README.md's pre-deploy checklist are
+# wired up. Switch back to `push: branches: [main]` once that's done.
+on:
+  workflow_dispatch:
+
+# Least privilege: only `contents: read` at the workflow level; the deploy job
+# gets the pages/id-token write scopes it alone needs.
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # This workflow never pushes back to the repo; don't leave the token
+          # in .git/config where later steps or artifacts could pick it up.
+          persist-credentials: false
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Build report data
+        working-directory: generator
+        run: uv run build.py
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install web dependencies
+        working-directory: web
+        run: npm ci
+
+      - name: Build web app
+        working-directory: web
+        run: npm run build
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
