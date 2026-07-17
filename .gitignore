@@ -216,3 +216,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Sensitive/raw data (potential PII) - never commit contents of this folder
+/sensitive-data/*
+!/sensitive-data/.gitkeep
+!/sensitive-data/README.md
