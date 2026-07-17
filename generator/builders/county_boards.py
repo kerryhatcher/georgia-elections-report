@@ -36,6 +36,10 @@ def build(content_dir: Path = CONTENT_DIR, output_dir: Path = OUTPUT_DIR) -> Non
                 "selection_method": county["selection_method"],
             }
         )
-        (detail_dir / f"{county['slug']}.json").write_text(json.dumps(county, indent=2))
+        (detail_dir / f"{county['slug']}.json").write_text(
+            json.dumps(county, indent=2), encoding="utf-8"
+        )
 
-    (output_dir / "counties.json").write_text(json.dumps(summaries, indent=2))
+    (output_dir / "counties.json").write_text(
+        json.dumps(summaries, indent=2), encoding="utf-8"
+    )

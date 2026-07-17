@@ -23,12 +23,14 @@ def test_build_writes_list_and_detail_json(tmp_path):
 
     county_boards.build(content_dir=FIXTURES, output_dir=output_dir)
 
-    counties = json.loads((output_dir / "counties.json").read_text())
+    counties = json.loads((output_dir / "counties.json").read_text(encoding="utf-8"))
     assert counties == [
         {"slug": "fulton", "name": "Fulton", "members": 5, "selection_method": "appointed"}
     ]
 
-    detail = json.loads((output_dir / "counties" / "fulton.json").read_text())
+    detail = json.loads(
+        (output_dir / "counties" / "fulton.json").read_text(encoding="utf-8")
+    )
     assert detail["slug"] == "fulton"
     assert detail["meeting_schedule"] == "First Tuesday monthly"
     assert "<p>" in detail["body_html"]
@@ -44,7 +46,8 @@ def test_parse_county_sanitizes_dangerous_html(tmp_path):
         "---\n"
         "Legit text.\n\n"
         "<script>alert('xss')</script>\n\n"
-        '<img src=x onerror="alert(1)">\n'
+        '<img src=x onerror="alert(1)">\n',
+        encoding="utf-8",
     )
 
     county = county_boards.parse_county(md)

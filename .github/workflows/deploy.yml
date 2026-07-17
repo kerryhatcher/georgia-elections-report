@@ -6,10 +6,10 @@ name: Deploy report site
 on:
   workflow_dispatch:
 
+# Least privilege: only `contents: read` at the workflow level; the deploy job
+# gets the pages/id-token write scopes it alone needs.
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: pages
@@ -20,6 +20,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # This workflow never pushes back to the repo; don't leave the token
+          # in .git/config where later steps or artifacts could pick it up.
+          persist-credentials: false
 
       - name: Install uv
         uses: astral-sh/setup-uv@v3
@@ -49,6 +53,9 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
