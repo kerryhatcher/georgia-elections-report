@@ -1,0 +1,19 @@
+[project]
+name = "naacp-report-generator"
+version = "0.1.0"
+description = "Compiles report content/data into static JSON for the web app"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "markdown>=3.10.2",
+    "python-frontmatter>=1.3.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "ruff>=0.15.22",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
