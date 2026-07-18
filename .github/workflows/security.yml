@@ -25,10 +25,11 @@ jobs:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: Install Trivy
         run: |
-          curl -sSfL "https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz" | tar xz trivy
+          mkdir -p "$RUNNER_TEMP/bin"
+          curl -sSfL "https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz" | tar xz -C "$RUNNER_TEMP/bin" trivy
       - name: Scan
         run: |
-          ./trivy fs \
+          "$RUNNER_TEMP/bin/trivy" fs \
             --scanners vuln,secret,misconfig \
             --secret-config .github/security/trivy-secret.yaml \
             --severity HIGH,CRITICAL \
@@ -45,10 +46,11 @@ jobs:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: Install Gitleaks
         run: |
-          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" | tar xz gitleaks
+          mkdir -p "$RUNNER_TEMP/bin"
+          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" | tar xz -C "$RUNNER_TEMP/bin" gitleaks
       - name: Scan
         run: |
-          ./gitleaks dir . \
+          "$RUNNER_TEMP/bin/gitleaks" dir . \
             --config .github/security/gitleaks.toml \
             --no-banner --redact -v --exit-code 1
 
@@ -61,20 +63,21 @@ jobs:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: Install duroc_hog
         run: |
-          curl -sSfL -o rh.zip "https://github.com/newrelic/rusty-hog/releases/download/v${RUSTY_HOG_VERSION}/rustyhogs-musl-duroc_hog-${RUSTY_HOG_VERSION}.zip"
-          unzip -q -j rh.zip -d rh-bin
-          chmod +x rh-bin/duroc_hog
+          mkdir -p "$RUNNER_TEMP/bin"
+          curl -sSfL -o "$RUNNER_TEMP/rh.zip" "https://github.com/newrelic/rusty-hog/releases/download/v${RUSTY_HOG_VERSION}/rustyhogs-musl-duroc_hog-${RUSTY_HOG_VERSION}.zip"
+          unzip -q -j "$RUNNER_TEMP/rh.zip" -d "$RUNNER_TEMP/bin"
+          chmod +x "$RUNNER_TEMP/bin/duroc_hog"
       - name: Scan (default rules)
         run: |
-          rh-bin/duroc_hog -a .github/security/rusty-hog-allowlist.json . > findings.json
-          jq . findings.json
-          test "$(jq length findings.json)" -eq 0
+          "$RUNNER_TEMP/bin/duroc_hog" -a .github/security/rusty-hog-allowlist.json . > "$RUNNER_TEMP/findings.json"
+          jq . "$RUNNER_TEMP/findings.json"
+          test "$(jq length "$RUNNER_TEMP/findings.json")" -eq 0
       - name: Scan (org-name rule)
         run: |
-          rh-bin/duroc_hog -a .github/security/rusty-hog-allowlist.json \
-            --regex .github/security/rusty-hog-org-rule.json . > findings.json
-          jq . findings.json
-          test "$(jq length findings.json)" -eq 0
+          "$RUNNER_TEMP/bin/duroc_hog" -a .github/security/rusty-hog-allowlist.json \
+            --regex .github/security/rusty-hog-org-rule.json . > "$RUNNER_TEMP/findings.json"
+          jq . "$RUNNER_TEMP/findings.json"
+          test "$(jq length "$RUNNER_TEMP/findings.json")" -eq 0
 
   kingfisher:
     name: Kingfisher
@@ -85,14 +88,15 @@ jobs:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: Install Kingfisher
         run: |
-          curl -sSfL "https://github.com/mongodb/kingfisher/releases/download/v${KINGFISHER_VERSION}/kingfisher-linux-x64.tgz" | tar xz kingfisher
+          mkdir -p "$RUNNER_TEMP/bin"
+          curl -sSfL "https://github.com/mongodb/kingfisher/releases/download/v${KINGFISHER_VERSION}/kingfisher-linux-x64.tgz" | tar xz -C "$RUNNER_TEMP/bin" kingfisher
       - name: Scan
         # Exit codes: 0 = clean, 200/205 = findings (fails the step).
         # Git history is scanned by Gitleaks-style tools on the working
         # tree here; history scanning is disabled because the org-name
         # rule would flag pre-rename history forever.
         run: |
-          ./kingfisher scan . \
+          "$RUNNER_TEMP/bin/kingfisher" scan . \
             --rules-path .github/security/kingfisher-rules.yml \
             --git-history none \
             --no-update-check
@@ -113,9 +117,9 @@ jobs:
           cp .github/security/detect_secrets_org_plugin.py "$RUNNER_TEMP/org_plugin.py"
           detect-secrets scan --all-files \
             -p "$RUNNER_TEMP/org_plugin.py" \
-            --exclude-files 'package-lock\.json$|(^|/)\.git/' > findings.json
-          jq .results findings.json
-          test "$(jq '.results | length' findings.json)" -eq 0
+            --exclude-files 'package-lock\.json$|(^|/)\.git/' > "$RUNNER_TEMP/findings.json"
+          jq .results "$RUNNER_TEMP/findings.json"
+          test "$(jq '.results | length' "$RUNNER_TEMP/findings.json")" -eq 0
 
   ripsecrets:
     name: ripsecrets
@@ -126,11 +130,13 @@ jobs:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: Install ripsecrets
         run: |
-          curl -sSfL "https://github.com/sirwart/ripsecrets/releases/download/v${RIPSECRETS_VERSION}/ripsecrets-${RIPSECRETS_VERSION}-x86_64-unknown-linux-gnu.tar.gz" | tar xz --strip-components=1
+          mkdir -p "$RUNNER_TEMP/bin"
+          curl -sSfL "https://github.com/sirwart/ripsecrets/releases/download/v${RIPSECRETS_VERSION}/ripsecrets-${RIPSECRETS_VERSION}-x86_64-unknown-linux-gnu.tar.gz" | tar xz -C "$RUNNER_TEMP/bin" --strip-components=1
       - name: Scan
         # Exits non-zero when secrets are found. No capture group in the
         # extra pattern, so matches are reported without a randomness test.
-        run: ./ripsecrets --additional-pattern '(?i)n[a]acp'
+        run: |
+          "$RUNNER_TEMP/bin/ripsecrets" --additional-pattern '(?i)n[a]acp'
 
   trufflehog:
     name: TruffleHog
@@ -141,11 +147,12 @@ jobs:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: Install TruffleHog
         run: |
-          curl -sSfL "https://github.com/trufflesecurity/trufflehog/releases/download/v${TRUFFLEHOG_VERSION}/trufflehog_${TRUFFLEHOG_VERSION}_linux_amd64.tar.gz" | tar xz trufflehog
+          mkdir -p "$RUNNER_TEMP/bin"
+          curl -sSfL "https://github.com/trufflesecurity/trufflehog/releases/download/v${TRUFFLEHOG_VERSION}/trufflehog_${TRUFFLEHOG_VERSION}_linux_amd64.tar.gz" | tar xz -C "$RUNNER_TEMP/bin" trufflehog
       - name: Scan
         run: |
           printf '.git/\n' > "$RUNNER_TEMP/th-exclude.txt"
-          ./trufflehog filesystem . \
+          "$RUNNER_TEMP/bin/trufflehog" filesystem . \
             --config .github/security/trufflehog.yaml \
             --exclude-paths "$RUNNER_TEMP/th-exclude.txt" \
             --no-update --fail
