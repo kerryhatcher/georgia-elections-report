@@ -236,3 +236,6 @@ web/public/data/
 
 # Playwright verification screenshots
 screenshots/
+
+# Local Claude Code workspace
+.claude/
