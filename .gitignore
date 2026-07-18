@@ -239,3 +239,10 @@ screenshots/
 
 # Local Claude Code workspace
 .claude/
+
+# Root-level uv init scaffolding (local only; the real Python project
+# is generator/, which has its own committed pyproject/uv.lock)
+/.python-version
+/main.py
+/pyproject.toml
+/uv.lock
