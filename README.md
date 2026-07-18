@@ -1,6 +1,6 @@
 # naacp-report
 
-A report commissioned by the NAACP covering elections administration, turnout, and voter demographics in the State of Georgia, USA.
+A report covering elections administration, turnout, and voter demographics in the State of Georgia, USA.
 
 ## Scope
 

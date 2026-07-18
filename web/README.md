@@ -1,6 +1,6 @@
 # Report Site (`web/`)
 
-Astro static site for the NAACP Georgia Elections Report. Pages are generated
+Astro static site for the Georgia Elections Report. Pages are generated
 at build time from the JSON that `generator/` writes into `public/data/`
 (gitignored). See `docs/decisions/0001-astro-ssg-with-react-islands.md` for
 why this is an Astro SSG rather than a SPA.

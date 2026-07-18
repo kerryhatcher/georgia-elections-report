@@ -5,7 +5,7 @@ Status: Approved
 
 ## Purpose
 
-The NAACP report has three deliverables (see `README.md`): a Georgia county boards of elections directory, county-level turnout rates, and registered voter demographics. This design covers the tooling that will turn researched/collected data into a browsable web report: a Python data pipeline that compiles source content into static JSON, and a React single-page app (SPA) that renders it.
+The report has three deliverables (see `README.md`): a Georgia county boards of elections directory, county-level turnout rates, and registered voter demographics. This design covers the tooling that will turn researched/collected data into a browsable web report: a Python data pipeline that compiles source content into static JSON, and a React single-page app (SPA) that renders it.
 
 None of the three deliverables have real data collected yet. v1 proves the pipeline end-to-end with one deliverable (county boards) and leaves the other two stubbed, ready to fill in as research completes.
 

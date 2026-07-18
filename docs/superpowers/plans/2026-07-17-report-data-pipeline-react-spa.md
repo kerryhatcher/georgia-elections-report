@@ -493,7 +493,7 @@ Delete any other rules `create vite` generated in this file — Tailwind's base 
 `web/src/App.tsx`
 ```tsx
 function App() {
-  return <h1 className="text-3xl font-bold text-blue-600">NAACP Report</h1>
+  return <h1 className="text-3xl font-bold text-blue-600">Georgia Elections Report</h1>
 }
 
 export default App

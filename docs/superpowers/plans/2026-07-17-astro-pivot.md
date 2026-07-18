@@ -15,7 +15,7 @@
 - Python commands always via `uv run` (never bare python). Node is v22.
 - Astro config: `site: 'https://kerryhatcher.github.io'`, `base: '/naacp-report'`. All internal links MUST go through the `href()` helper from `src/lib/url.ts` (Astro does not auto-prefix links with `base`).
 - Null display fallback is the em-dash character `—` (U+2014). Placeholder page copy is exactly `Data coming soon.`
-- Site title suffix is exactly `NAACP Georgia Elections Report`.
+- Site title suffix is exactly `Georgia Elections Report`.
 - Commit after every task with Conventional Commits.
 - Before any `npm run build` or `npm run dev`, generated data must exist: `cd generator && uv run build.py` (writes `web/public/data/`). This directory is gitignored — that is correct, do not commit its contents.
 
@@ -77,7 +77,7 @@ git rm -r web/src web/index.html web/vite.config.ts web/tsconfig.app.json web/ts
 `web/package.json`:
 ```json
 {
-  "name": "naacp-report-web",
+  "name": "georgia-elections-report-web",
   "private": true,
   "type": "module",
   "scripts": {
@@ -119,7 +119,7 @@ export default defineConfig({
 ---
 
 <html lang="en">
-  <head><title>NAACP Georgia Elections Report</title></head>
+  <head><title>Georgia Elections Report</title></head>
   <body><h1>Scaffold OK</h1></body>
 </html>
 ```
@@ -375,7 +375,7 @@ const current = Astro.url.pathname
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href={href('/favicon.svg')} />
-    <title>{title} · NAACP Georgia Elections Report</title>
+    <title>{title} · Georgia Elections Report</title>
   </head>
   <body>
     <nav class="p-4 border-b flex gap-4">
@@ -706,7 +706,7 @@ jobs:
 ```markdown
 # Report Site (`web/`)
 
-Astro static site for the NAACP Georgia Elections Report. Pages are generated
+Astro static site for the Georgia Elections Report. Pages are generated
 at build time from the JSON that `generator/` writes into `public/data/`
 (gitignored). See `docs/decisions/0001-astro-ssg-with-react-islands.md` for
 why this is an Astro SSG rather than a SPA.

@@ -8,4 +8,4 @@ Working folder for raw data that may contain personally identifiable information
 
 - Never rename or move raw PII-bearing files outside this folder.
 - Derived, de-identified, or aggregated outputs (e.g. county-level turnout summaries with no individual-level data) belong outside this folder, in the normal project tree, and can be committed.
-- If a file must be shared with collaborators, use a secure channel (not git) and confirm data-handling terms with the NAACP point of contact first.
+- If a file must be shared with collaborators, use a secure channel (not git) and confirm data-handling terms with the commissioning organization’s point of contact first.
