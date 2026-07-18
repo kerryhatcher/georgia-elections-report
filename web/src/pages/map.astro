@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/Layout.astro'
+import CountyMap from '../components/CountyMap.tsx'
+import { getCounties } from '../lib/data'
+
+const counties = await getCounties()
+const base = import.meta.env.BASE_URL
+const profiledCount = counties.length
+---
+
+<Layout
+  title="County Map"
+  description="An interactive map of Georgia’s 159 counties — see which county boards of elections have been profiled and jump to each one."
+>
+  <header class="reveal max-w-3xl">
+    <p class="kicker text-accent">Chapter 01 · Map</p>
+    <h1 class="display-opt mt-4 text-4xl font-semibold leading-tight tracking-tight sm:text-6xl">
+      The 159 Counties
+    </h1>
+    <p class="mt-5 max-w-[46ch] text-lg leading-relaxed text-ink-2 sm:text-xl">
+      Georgia is run county by county. Hover a county to see its status; click a
+      highlighted county to read its board of elections profile. Counties not
+      yet profiled are greyed out — sourcing is ongoing.
+    </p>
+  </header>
+
+  <section class="reveal-late mt-12">
+    <div class="rule-headline flex items-baseline justify-between pt-4">
+      <p class="kicker text-ink-2">Georgia · county map</p>
+      <p class="kicker text-ink-2">{profiledCount} of 159 profiled</p>
+    </div>
+
+    <div class="mt-6">
+      <CountyMap counties={counties} base={base} client:visible />
+    </div>
+
+    <p class="mt-6 max-w-[70ch] font-sans text-xs leading-relaxed text-ink-2">
+      County boundaries from the U.S. Census TIGER/Line Shapefiles, simplified
+      for display. A county is highlighted once its board of elections has been
+      profiled against county records and the local act that creates it.
+    </p>
+  </section>
+</Layout>

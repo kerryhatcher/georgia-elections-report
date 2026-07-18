@@ -40,9 +40,26 @@ project-page URL. Internal links must use the `href()` helper in
   place that touches the generator's output contract.
 - `src/pages/counties/[slug].astro` — one static page per county via
   `getStaticPaths`.
+- `src/pages/map.astro` — interactive county map (React island) of all 159
+  counties; profiled counties are highlighted and link to their board page.
+- `src/components/CountyMap.tsx` — the map island. Renders precomputed SVG
+  paths (see below); no geo library at runtime.
 - `src/layouts/Layout.astro` — shared head/nav/`<main>`; takes a `title` prop.
-- React islands (maps/charts) are supported via `@astrojs/react` but none
-  exist yet — turnout and demographics are placeholder pages.
+- React islands (maps/charts) are supported via `@astrojs/react`.
+
+### County map geometry
+
+`scripts/build-map-paths.mjs` turns the committed TopoJSON boundary file
+(`scripts/data/ga-counties.topojson.json`, Census TIGER/Line) into a small
+`public/geo/ga-counties-paths.json` of precomputed SVG path strings. Rerun it
+only when the boundary source changes:
+
+```bash
+node scripts/build-map-paths.mjs
+```
+
+`d3-geo` and `topojson-client` are devDependencies used solely by that script;
+the shipped site fetches the small paths JSON and renders `<path d=…>`.
 
 ## Deployment
 

@@ -142,6 +142,70 @@
     vertical-align: baseline;
     min-width: 2px;
   }
+
+  /* Interactive county map (React island on /map). */
+  .county-map {
+    position: relative;
+  }
+  .county-map__legend {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  .county-map__swatch {
+    display: inline-block;
+    width: 0.85rem;
+    height: 0.85rem;
+    border: 1px solid var(--color-rule-strong);
+  }
+  .county-map__swatch--profiled {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+  .county-map__swatch--pending {
+    background-color: var(--color-paper-2);
+  }
+  .county-map__svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .county-map__loading {
+    padding: 2rem 0;
+  }
+  .county-map__tooltip {
+    position: fixed;
+    pointer-events: none;
+    z-index: 10;
+    background-color: var(--color-paper);
+    border: 1px solid var(--color-rule-strong);
+    box-shadow: 0 2px 12px rgb(0 0 0 / 0.12);
+    padding: 0.5rem 0.75rem;
+    max-width: 16rem;
+  }
+  .county-map__tooltip-name {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.15;
+    color: var(--color-ink);
+  }
+  .county-map__tooltip-meta {
+    margin-top: 0.2rem;
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-ink-2);
+  }
+  .county-map__tooltip-go {
+    color: var(--color-accent);
+  }
+  .county-map__tooltip-meta--pending {
+    color: var(--color-ink-2);
+  }
 }
 
 /* One restrained page-load reveal; nothing else moves on its own. */
