@@ -246,3 +246,6 @@ screenshots/
 /main.py
 /pyproject.toml
 /uv.lock
+
+# Local SQLite database
+/database.db
