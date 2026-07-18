@@ -1,0 +1,9 @@
+# Kingfisher custom rule: flag any org-name reference.
+# The pattern is written as n[a]acp so this file doesn't match itself.
+rules:
+  - name: Organization Name Reference
+    id: custom.orgname.1
+    pattern: '(?i)(n[a]acp)'
+    min_entropy: 0.0
+    confidence: high
+    visible: true

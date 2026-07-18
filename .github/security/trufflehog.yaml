@@ -1,0 +1,10 @@
+# TruffleHog custom detector: flag any org-name reference.
+# The keyword "n" effectively disables the keyword pre-filter so the regex
+# runs everywhere; the pattern is written as n[a]acp so this file doesn't
+# match itself.
+detectors:
+  - name: org-name-reference
+    keywords:
+      - "n"
+    regex:
+      reference: "(?i)n[a]acp"

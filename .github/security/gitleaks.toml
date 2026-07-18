@@ -1,0 +1,12 @@
+# Gitleaks config: default rules plus a custom org-name rule.
+# The pattern is written as n[a]acp so this file doesn't match itself.
+[extend]
+useDefault = true
+
+[[rules]]
+id = "org-name-reference"
+description = "Organization name reference (must stay out of this repo)"
+regex = '''(?i)n[a]acp'''
+
+[allowlist]
+paths = ['''(^|/)\.git/''']
