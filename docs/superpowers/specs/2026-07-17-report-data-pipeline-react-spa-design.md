@@ -14,7 +14,7 @@ None of the three deliverables have real data collected yet. v1 proves the pipel
 Two independent projects in one repo, connected by a JSON handoff:
 
 ```
-naacp-report/
+georgia-elections-report/
   generator/                 # uv-managed Python project
     pyproject.toml
     build.py                 # uv run build.py — orchestrates all collections
@@ -128,7 +128,7 @@ GitHub Actions workflow, triggered on push to `main`:
 2. `npm run build` in `web/` — Vite bundles the SPA into `web/dist/`, copying `public/data/*.json` along with it.
 3. Publish `web/dist/` to the `gh-pages` branch (e.g. via `peaceiris/actions-gh-pages` or `actions/deploy-pages`).
 
-Resulting URL: `https://<org>.github.io/naacp-report/`.
+Resulting URL: `https://<org>.github.io/georgia-elections-report/`.
 
 ## Out of scope / future work
 

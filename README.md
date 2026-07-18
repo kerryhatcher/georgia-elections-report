@@ -1,4 +1,4 @@
-# naacp-report
+# georgia-elections-report
 
 A report covering elections administration, turnout, and voter demographics in the State of Georgia, USA.
 

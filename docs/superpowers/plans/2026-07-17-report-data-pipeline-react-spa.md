@@ -65,7 +65,7 @@ Update the `[project]` block's `name`/`description`, and add a `[tool.pytest.ini
 
 ```toml
 [project]
-name = "naacp-report-generator"
+name = "georgia-elections-report-generator"
 version = "0.1.0"
 description = "Compiles report content/data into static JSON for the web app"
 readme = "README.md"

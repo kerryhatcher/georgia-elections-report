@@ -10,10 +10,10 @@
 
 ## Global Constraints
 
-- Run all commands from the repo checkout at `/home/kwhatcher/projects/naacp-report/.claude/worktrees/report-data-pipeline-react-spa` on branch `astro-pivot`. Never `cd` outside it.
+- Run all commands from the repo checkout at `/home/kwhatcher/projects/georgia-elections-report/.claude/worktrees/report-data-pipeline-react-spa` on branch `astro-pivot`. Never `cd` outside it.
 - **Do not modify anything under `generator/`.** The JSON contract is frozen: list items are `{slug, name, members, selection_method}`; detail adds `{meeting_schedule, body_html}`; `members` is `number | null`, `selection_method`/`meeting_schedule` are `string | null`.
 - Python commands always via `uv run` (never bare python). Node is v22.
-- Astro config: `site: 'https://kerryhatcher.github.io'`, `base: '/naacp-report'`. All internal links MUST go through the `href()` helper from `src/lib/url.ts` (Astro does not auto-prefix links with `base`).
+- Astro config: `site: 'https://kerryhatcher.github.io'`, `base: '/georgia-elections-report'`. All internal links MUST go through the `href()` helper from `src/lib/url.ts` (Astro does not auto-prefix links with `base`).
 - Null display fallback is the em-dash character `—` (U+2014). Placeholder page copy is exactly `Data coming soon.`
 - Site title suffix is exactly `Georgia Elections Report`.
 - Commit after every task with Conventional Commits.
@@ -100,7 +100,7 @@ import { defineConfig } from 'astro/config'
 
 export default defineConfig({
   site: 'https://kerryhatcher.github.io',
-  base: '/naacp-report',
+  base: '/georgia-elections-report',
 })
 ```
 
@@ -150,7 +150,7 @@ Expected: `astro add` edits `astro.config.mjs` itself — adding `react()` to `i
 cd web && npm run build
 ```
 
-Expected: build succeeds; `web/dist/index.html` exists and contains `Scaffold OK`. Note the output URL structure respects `base` (assets referenced under `/naacp-report/`).
+Expected: build succeeds; `web/dist/index.html` exists and contains `Scaffold OK`. Note the output URL structure respects `base` (assets referenced under `/georgia-elections-report/`).
 
 - [ ] **Step 5: Verify typecheck works**
 
@@ -338,7 +338,7 @@ git add web/vitest.config.ts web/src/lib/data.ts web/src/tests && git commit -m 
 `web/src/lib/url.ts`:
 ```ts
 // Astro does not prefix internal links with `base` automatically; every
-// internal href must go through this helper. BASE_URL is '/naacp-report'
+// internal href must go through this helper. BASE_URL is '/georgia-elections-report'
 // in this project (may or may not carry a trailing slash depending on config).
 const base = import.meta.env.BASE_URL.replace(/\/+$/, '')
 
@@ -723,10 +723,10 @@ Then:
 
 ```bash
 npm install
-npm run dev        # serves at http://localhost:4321/naacp-report/
+npm run dev        # serves at http://localhost:4321/georgia-elections-report/
 ```
 
-Note the `/naacp-report/` base path — the dev server mirrors the GitHub Pages
+Note the `/georgia-elections-report/` base path — the dev server mirrors the GitHub Pages
 project-page URL. Internal links must use the `href()` helper in
 `src/lib/url.ts`, which prefixes the configured base.
 
@@ -754,7 +754,7 @@ project-page URL. Internal links must use the `href()` helper in
 
 `.github/workflows/deploy.yml` runs tests, builds data + site, and deploys to
 GitHub Pages on push to `main`. Hosted at
-`https://kerryhatcher.github.io/naacp-report/` (`site` + `base` in
+`https://kerryhatcher.github.io/georgia-elections-report/` (`site` + `base` in
 `astro.config.mjs`). If a custom domain is added later, change those two
 values and nothing else.
 
@@ -795,11 +795,11 @@ This task must run in the main session (it needs the Playwright MCP browser tool
 cd generator && uv run build.py && cd ../web && npm run dev
 ```
 
-(run in background; server at `http://localhost:4321/naacp-report/`)
+(run in background; server at `http://localhost:4321/georgia-elections-report/`)
 
 - [ ] **Step 2: Screenshot the three key states**
 
-With Playwright MCP: navigate to `http://localhost:4321/naacp-report/` (counties table with Fulton row → `screenshots/astro-home.png`); click through to Fulton (dl grid + prose body → `screenshots/astro-county-detail.png`); navigate to `http://localhost:4321/naacp-report/nope` (404 page → `screenshots/astro-404.png`).
+With Playwright MCP: navigate to `http://localhost:4321/georgia-elections-report/` (counties table with Fulton row → `screenshots/astro-home.png`); click through to Fulton (dl grid + prose body → `screenshots/astro-county-detail.png`); navigate to `http://localhost:4321/georgia-elections-report/nope` (404 page → `screenshots/astro-404.png`).
 
 - [ ] **Step 3: Verify no browser console errors on any of the three pages**
 

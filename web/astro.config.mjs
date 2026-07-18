@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   site: 'https://kerryhatcher.github.io',
-  base: '/naacp-report',
+  base: '/georgia-elections-report',
   integrations: [react()],
 
   vite: {

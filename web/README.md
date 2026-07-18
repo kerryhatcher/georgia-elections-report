@@ -17,10 +17,10 @@ Then:
 
 ```bash
 npm install
-npm run dev        # serves at http://localhost:4321/naacp-report/
+npm run dev        # serves at http://localhost:4321/georgia-elections-report/
 ```
 
-Note the `/naacp-report/` base path — the dev server mirrors the GitHub Pages
+Note the `/georgia-elections-report/` base path — the dev server mirrors the GitHub Pages
 project-page URL. Internal links must use the `href()` helper in
 `src/lib/url.ts`, which prefixes the configured base.
 
@@ -48,7 +48,7 @@ project-page URL. Internal links must use the `href()` helper in
 
 `.github/workflows/deploy.yml` runs tests, builds data + site, and deploys to
 GitHub Pages on push to `main`. Hosted at
-`https://kerryhatcher.github.io/naacp-report/` (`site` + `base` in
+`https://kerryhatcher.github.io/georgia-elections-report/` (`site` + `base` in
 `astro.config.mjs`). If a custom domain is added later, change those two
 values and nothing else.
 
